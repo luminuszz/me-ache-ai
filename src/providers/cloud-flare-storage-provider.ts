@@ -16,19 +16,18 @@ export const cloudFlareStorageProvider: StorageProvider = {
     for (const file of files) {
       const fileKey = createId().concat(file.name).concat(".jpeg");
 
-      const s3Command = new PutObjectCommand({
+      const puts3Command = new PutObjectCommand({
         Bucket: env.CLOUD_FLARE_BUCKET_NAME,
         Key: fileKey,
         ContentType: "image/jpeg",
       });
 
-      const url = await getSignedUrl(cloudFlareStorageConnectionAdapter, s3Command, { expiresIn: 600 });
-
+      const url = await getSignedUrl(cloudFlareStorageConnectionAdapter, puts3Command, { expiresIn: 600 });
       storageUrls.push({
         fileKey,
         filename: file.name,
         saveFileUrlIntent: url,
-        storageUrl: `${env.CLOUD_FLARE_BUCKET_PUBLIC_URL}/${fileKey}`,
+        storageUrl: `${env.CLOUD_FLARE_BUCKET_PUBLIC_URL}/${env.CLOUD_FLARE_BUCKET_NAME}/${fileKey}`,
       });
     }
 

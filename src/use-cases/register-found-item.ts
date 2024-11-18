@@ -31,5 +31,7 @@ export async function registerFoundItem(params: RegisterFoundItemInput) {
     })
     .returning({ foundItemId: foundItems.id });
 
+  console.log({ foundItemId });
+
   return right({ foundItemId });
 }

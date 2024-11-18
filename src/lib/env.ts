@@ -5,6 +5,8 @@ const envSchema = z.object({
   DATABASE_URL: z.string(),
   CLOUD_FLARE_BUCKET_URL: z.string(),
   CLOUD_FLARE_BUCKET_PUBLIC_URL: z.string(),
+  CLOUD_FLARE_R2_SECRET_KEY: z.string(),
+  CLOUD_FLARE_R2_PUBLIC_KEY: z.string(),
   CLOUD_FLARE_BUCKET_NAME: z.string(),
 });
 
