@@ -44,7 +44,7 @@ export function FoundItemCard({ lostItem }: ListItemProps) {
             <CardTitle className="text-xl font-bold">{name}</CardTitle>
             <CardDescription className="mt-1 text-sm text-muted-foreground">{description}</CardDescription>
 
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="flex items-center text-sm">
               <Calendar className="size-4 mr-2" />
               <span>{formattedCreatedAt}</span>
             </div>
@@ -52,11 +52,11 @@ export function FoundItemCard({ lostItem }: ListItemProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <MapPin className="size-4 " />
+        <div className="flex items-center gap-2">
+          <MapPin className="size-4" />
           <p className="text-sm">Onde foi encontrado:</p>
         </div>
-        <p className="mt-2 text-sm">{locationFound}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{locationFound}</p>
       </CardContent>
     </Card>
   );
