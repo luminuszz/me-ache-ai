@@ -1,4 +1,4 @@
-import { RegisterLostItemForm } from "@/components/forms/register-lost-item-form";
+import { RegisterLostItemRequest } from "@/components/forms/register-lost-item-request-form";
 import { Logo } from "@/components/logo";
 import { Metadata } from "next";
 
@@ -14,7 +14,7 @@ export default function HomePage() {
       <h1 className="text-4xl font-bold text-foreground mt-2">Me_ache_ai</h1>
       <h1 className="text2xl font-bold text-muted-foreground ">From Okami</h1>
 
-      <RegisterLostItemForm />
+      <RegisterLostItemRequest />
     </main>
   );
 }

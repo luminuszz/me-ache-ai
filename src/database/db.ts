@@ -1,11 +1,32 @@
-import { drizzle } from "drizzle-orm/neon-http";
+import { env } from "@/lib/env";
+import { Pool } from "@neondatabase/serverless";
+import { ExtractTablesWithRelations } from "drizzle-orm";
+import { PgTransaction } from "drizzle-orm/pg-core";
 
-import { neon } from "@neondatabase/serverless";
 import * as schema from "./schema";
 
-const sql = neon(process.env.DATABASE_URL!);
+import { drizzle, NeonQueryResultHKT } from "drizzle-orm/neon-serverless";
 
 export const db = drizzle({
   schema,
-  client: sql,
+  connection: env.DATABASE_URL,
 });
+
+type TransactionType = PgTransaction<NeonQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>;
+
+export const createDbTransaction = async <TransactionResponse>(call: (context: TransactionType) => Promise<TransactionResponse>) => {
+  const connectionPool = new Pool({ connectionString: env.DATABASE_POOLED_CONNECTION_URL });
+
+  const currentDbConnection = drizzle({
+    schema,
+    client: connectionPool,
+  });
+
+  const results = await currentDbConnection.transaction(async (tx) => {
+    return call(tx);
+  });
+
+  await connectionPool.end();
+
+  return results;
+};

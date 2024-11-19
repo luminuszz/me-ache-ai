@@ -1,6 +1,6 @@
 import { FoundItemCard } from "@/app/found-item/components/found-item-card";
-import { db } from "@/database/db";
-import { foundItems } from "@/database/schema";
+import { createDbTransaction } from "@/database/db";
+import { items } from "@/database/schema";
 import { env } from "@/lib/env";
 import { count, desc } from "drizzle-orm";
 import { FoundItemPagination } from "../components/found-list-pagination";
@@ -17,16 +17,23 @@ interface ListFoundItensPageProps {
 export default async function ListFoundItensPage({ searchParams }: ListFoundItensPageProps) {
   const { page = 1, pageSize = 10 } = searchParams;
 
-  const results = await db.query.foundItems.findMany({
-    orderBy: [desc(foundItems.created_at)],
-    with: {
-      images: true,
-    },
-    limit: pageSize,
-    offset: (page - 1) * pageSize,
-  });
+  const { results, totalOfRows } = await createDbTransaction(async (tx) => {
+    const results = await tx.query.items.findMany({
+      orderBy: [desc(items.created_at)],
+      with: {
+        images: true,
+      },
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+    });
 
-  const [{ count: totalOfRows }] = await db.select({ count: count() }).from(foundItems);
+    const [{ count: totalOfRows }] = await tx.select({ count: count() }).from(items);
+
+    return {
+      results,
+      totalOfRows,
+    };
+  });
 
   const totalPages = Math.ceil(totalOfRows / pageSize);
 

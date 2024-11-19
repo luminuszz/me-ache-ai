@@ -1,11 +1,11 @@
 {
-  "id": "3c642da6-aef8-4b11-b761-f60b791c8013",
+  "id": "dc2a7490-027a-4266-a779-c9e85c055af8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.lost_item_images": {
-      "name": "lost_item_images",
+    "public.item_images": {
+      "name": "item_images",
       "schema": "",
       "columns": {
         "id": {
@@ -43,10 +43,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "lost_item_images_foundItemId_found_item_id_fk": {
-          "name": "lost_item_images_foundItemId_found_item_id_fk",
-          "tableFrom": "lost_item_images",
-          "tableTo": "found_item",
+        "item_images_foundItemId_items_id_fk": {
+          "name": "item_images_foundItemId_items_id_fk",
+          "tableFrom": "item_images",
+          "tableTo": "items",
           "columnsFrom": [
             "foundItemId"
           ],
@@ -63,8 +63,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.found_item": {
-      "name": "found_item",
+    "public.items": {
+      "name": "items",
       "schema": "",
       "columns": {
         "id": {
@@ -98,6 +98,14 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "status": {
+          "name": "status",
+          "type": "status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'lost'"
         }
       },
       "indexes": {},
@@ -108,8 +116,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.lost_item": {
-      "name": "lost_item",
+    "public.lost_item_requests": {
+      "name": "lost_item_requests",
       "schema": "",
       "columns": {
         "id": {
@@ -119,20 +127,20 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name": {
-          "name": "name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "description": {
           "name": "description",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
-        "locationDescription": {
-          "name": "locationDescription",
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lostLocationDescription": {
+          "name": "lostLocationDescription",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
@@ -143,6 +151,20 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "cpf": {
+          "name": "cpf",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "requestStatus": {
+          "name": "requestStatus",
+          "type": "request_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
         }
       },
       "indexes": {},
@@ -154,7 +176,24 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.request_status": {
+      "name": "request_status",
+      "schema": "public",
+      "values": [
+        "pending",
+        "finished"
+      ]
+    },
+    "public.status": {
+      "name": "status",
+      "schema": "public",
+      "values": [
+        "lost",
+        "found"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

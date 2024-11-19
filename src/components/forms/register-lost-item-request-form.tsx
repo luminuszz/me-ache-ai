@@ -1,7 +1,7 @@
 "use client";
 
 import { cpfMask } from "@/lib/utils";
-import { registerFoundItem } from "@/use-cases/register-found-item";
+import { registerLostItemRequest } from "@/use-cases/register-lost-item-request";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ const registerLostItemSchemaForm = z.object({
   description: z.string({ message: "Informe uma descrição valida", required_error: "Informe uma descrição valida" }).min(10).max(100),
   title: z.string().min(10).max(50),
   lostLocationDescription: z.string().min(10).max(100),
+  contactEmail: z.string().email(),
   cpf: z
     .string()
     .length(11)
@@ -22,23 +23,25 @@ const registerLostItemSchemaForm = z.object({
 });
 type RegisterLostItemSchema = z.infer<typeof registerLostItemSchemaForm>;
 
-export function RegisterLostItemForm() {
+export function RegisterLostItemRequest() {
   const form = useForm<RegisterLostItemSchema>({
     values: {
       description: "",
       lostLocationDescription: "",
       title: "",
       cpf: "",
+      contactEmail: "",
     },
     resolver: zodResolver(registerLostItemSchemaForm),
     reValidateMode: "onChange",
   });
 
   async function handleRegisterLostItem(payload: RegisterLostItemSchema) {
-    const results = await registerFoundItem({
+    const results = await registerLostItemRequest({
       description: payload.description,
-      locationDescription: payload.lostLocationDescription,
+      lostLocationDescription: payload.lostLocationDescription,
       title: payload.title,
+      cpf: payload.cpf,
     });
 
     if (!results.success) {
@@ -50,7 +53,7 @@ export function RegisterLostItemForm() {
 
   return (
     <Form {...form}>
-      <form className="space-y-4 flex justify-center gap-10 max-w-[1000px] w-full" onSubmit={form.handleSubmit(handleRegisterLostItem)}>
+      <form className="space-y-4 flex justify-center gap-10 max-w-[800px] w-full" onSubmit={form.handleSubmit(handleRegisterLostItem)}>
         <section className="flex-col gap-4 flex flex-1">
           <FormField
             control={form.control}
@@ -75,6 +78,28 @@ export function RegisterLostItemForm() {
                 <FormControl>
                   <Input
                     placeholder="ex: 000-000-000-00 "
+                    {...field}
+                    onChange={(e) => {
+                      e.target.value = cpfMask(e.target.value);
+                      field.onChange(e);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="contactEmail"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>E-mail de contato</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="ex: @gmail.com"
                     {...field}
                     onChange={(e) => {
                       e.target.value = cpfMask(e.target.value);

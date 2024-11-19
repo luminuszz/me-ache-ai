@@ -8,6 +8,8 @@ const envSchema = z.object({
   CLOUD_FLARE_R2_SECRET_KEY: z.string(),
   CLOUD_FLARE_R2_PUBLIC_KEY: z.string(),
   CLOUD_FLARE_BUCKET_NAME: z.string(),
+  DATABASE_POOLED_CONNECTION_URL: z.string(),
 });
 
+export type EnvType = z.infer<typeof envSchema>;
 export const env = envSchema.parse(process.env);
