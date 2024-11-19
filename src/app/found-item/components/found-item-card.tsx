@@ -25,7 +25,7 @@ export function FoundItemCard({ lostItem }: ListItemProps) {
   const [currentImage, setCurrentImage] = useState(imageUrl);
 
   return (
-    <Card className="w-full max-w-sm overflow-hidden cursor-pointer">
+    <Card className="w-full max-w-md overflow-hidden cursor-pointer">
       <div className="relative w-full h-48">
         <Image
           onError={() => {
@@ -33,8 +33,8 @@ export function FoundItemCard({ lostItem }: ListItemProps) {
           }}
           src={currentImage}
           alt={name}
-          layout="fill"
           objectFit="cover"
+          layout="fill"
           className="transition-transform duration-300 ease-in-out hover:scale-105"
         />
       </div>
