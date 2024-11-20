@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/database/db";
-import { foundItemImages } from "@/database/schema";
+import { itemImages } from "@/database/schema";
 import { dependenceInjector } from "@/lib/dependenceInjector";
 import { left, right } from "@/lib/utils";
 import { z } from "zod";
@@ -38,7 +38,7 @@ export async function saveFoundImagesIntent(params: SaveFoundImageSchema) {
       }))
     );
 
-    await db.insert(foundItemImages).values(
+    await db.insert(itemImages).values(
       uploadResults.map((item) => ({
         foundItemId,
         filename: item.filename,
