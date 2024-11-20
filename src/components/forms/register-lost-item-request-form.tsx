@@ -3,6 +3,7 @@
 import { cpfMask } from "@/lib/utils";
 import { registerLostItemRequest } from "@/use-cases/register-lost-item-request";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -16,10 +17,7 @@ const registerLostItemSchemaForm = z.object({
   title: z.string().min(10).max(50),
   lostLocationDescription: z.string().min(10).max(100),
   contactEmail: z.string().email(),
-  cpf: z
-    .string()
-    .length(11)
-    .regex(/^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/),
+  cpf: z.string().regex(/^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/),
 });
 type RegisterLostItemSchema = z.infer<typeof registerLostItemSchemaForm>;
 
@@ -45,10 +43,21 @@ export function RegisterLostItemRequest() {
     });
 
     if (!results.success) {
-      toast.error("Erro ao registrar item perdido");
+      if (results.exception.code === "QUOTE_LIMIT_EXCEEDED") {
+        toast.error("Limite de solicitações atingido", {
+          description: "Você só pode registrar um item perdido a cada 8 horas.",
+        });
+      } else {
+        toast.error("Erro ao registrar item perdido");
+      }
 
       return;
     }
+
+    toast.success("Item perdido registrado com sucesso", {
+      description: "Enviaremos um e-mail para você quando encontrarmos o item",
+      duration: 5000,
+    });
   }
 
   return (
@@ -97,15 +106,7 @@ export function RegisterLostItemRequest() {
               <FormItem>
                 <FormLabel>E-mail de contato</FormLabel>
                 <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="ex: @gmail.com"
-                    {...field}
-                    onChange={(e) => {
-                      e.target.value = cpfMask(e.target.value);
-                      field.onChange(e);
-                    }}
-                  />
+                  <Input type="email" placeholder="ex: @gmail.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -142,8 +143,8 @@ export function RegisterLostItemRequest() {
             )}
           />
 
-          <Button className="w-full" type="submit">
-            Registar item perdido
+          <Button className="w-full" type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? <Loader className="size-5 animate-spin" /> : "Registar item perdido"}
           </Button>
         </section>
       </form>

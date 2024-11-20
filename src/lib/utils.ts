@@ -1,18 +1,38 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-
-import { type ZodError } from "zod";
+import { ZodError } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const errors = {
-  invalidInput(error: ZodError) {
+export type ErrorsCode = "INVALID_INPUT" | "UNAUTHORIZED" | "QUOTE_LIMIT_EXCEEDED";
+
+export type ErrorHandler = (data?: unknown) => {
+  code: ErrorsCode;
+  message: string;
+  errors?: unknown;
+};
+
+export const errors: Record<string, ErrorHandler> = {
+  invalidInput(error) {
     return {
       code: "INVALID_INPUT",
       message: "Invalid input",
-      errors: error.errors,
+      errors: error instanceof ZodError ? error?.errors : null,
+    };
+  },
+  unauthorized() {
+    return {
+      code: "UNAUTHORIZED",
+      message: "Unauthorized",
+    };
+  },
+
+  quoteLimitExceeded() {
+    return {
+      code: "QUOTE_LIMIT_EXCEEDED",
+      message: "Quote limit exceeded",
     };
   },
 };

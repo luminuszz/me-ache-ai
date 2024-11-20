@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/database/db";
-import { foundItems } from "@/database/schema";
+import { items } from "@/database/schema";
 import { errors, left, right } from "@/lib/utils";
 import { z } from "zod";
 
@@ -23,15 +23,13 @@ export async function registerFoundItem(params: RegisterFoundItemInput) {
   const { description, locationDescription, title } = result.data;
 
   const [{ foundItemId }] = await db
-    .insert(foundItems)
+    .insert(items)
     .values({
       description,
       locationDescription,
       name: title,
     })
-    .returning({ foundItemId: foundItems.id });
-
-  console.log({ foundItemId });
+    .returning({ foundItemId: items.id });
 
   return right({ foundItemId });
 }
