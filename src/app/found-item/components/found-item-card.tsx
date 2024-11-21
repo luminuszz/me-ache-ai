@@ -25,7 +25,7 @@ export function FoundItemCard({ lostItem }: ListItemProps) {
   const [currentImage, setCurrentImage] = useState(imageUrl);
 
   return (
-    <Card className="w-full max-w-md overflow-hidden cursor-pointer">
+    <Card className="w-full max-w-2xl overflow-hidden cursor-pointer">
       <div className="relative w-full h-48">
         <Image
           onError={() => {

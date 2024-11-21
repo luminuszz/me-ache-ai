@@ -15,7 +15,7 @@ export const db = drizzle({
 type TransactionType = PgTransaction<NeonQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>;
 
 export const createDbTransaction = async <TransactionResponse>(call: (context: TransactionType) => Promise<TransactionResponse>) => {
-  const connectionPool = new Pool({ connectionString: env.DATABASE_POOLED_CONNECTION_URL });
+  const connectionPool = new Pool({ connectionString: env.DATABASE_URL });
 
   const currentDbConnection = drizzle({
     schema,

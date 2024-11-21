@@ -3,7 +3,7 @@
 import { cpfMask } from "@/lib/utils";
 import { registerLostItemRequest } from "@/use-cases/register-lost-item-request";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
+import { CheckCircle, Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -60,9 +60,18 @@ export function RegisterLostItemRequest() {
     });
   }
 
+  if (form.formState.isSubmitSuccessful) {
+    return (
+      <div className="flex justify-center items-center text-center flex-col mt-10 gap-4">
+        <h2 className="text-2xl">Solicitação Enviada</h2>
+        <CheckCircle className="size-10 text-emerald-500" />
+      </div>
+    );
+  }
+
   return (
     <Form {...form}>
-      <form className="space-y-4 flex justify-center gap-10 max-w-[800px] w-full" onSubmit={form.handleSubmit(handleRegisterLostItem)}>
+      <form className="space-y-4 flex justify-center gap-10 max-w-[800px] w-full px-10" onSubmit={form.handleSubmit(handleRegisterLostItem)}>
         <section className="flex-col gap-4 flex flex-1">
           <FormField
             control={form.control}

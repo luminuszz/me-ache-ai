@@ -7,11 +7,12 @@ import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { ImageDropZone } from "../image-drop-zone";
-import { Button } from "../ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+
+import { ImageDropZone } from "@/components/image-drop-zone";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   title: z.string().min(3).max(50),
@@ -99,7 +100,7 @@ export function RegisterFoundItemForm() {
 
   return (
     <Form {...form}>
-      <form className="space-y-4 flex justify-center gap-10 max-w-[1000px] w-full" onSubmit={form.handleSubmit(handleRegisterItem)}>
+      <form className="space-y-4 flex justify-center gap-10 max-w-[1000px] w-full px-10" onSubmit={form.handleSubmit(handleRegisterItem)}>
         <section className="flex-col gap-4 flex flex-1">
           <FormField
             control={form.control}
@@ -139,7 +140,7 @@ export function RegisterFoundItemForm() {
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
-                <FormDescription>Informe o local onde o viu pela ultima vez</FormDescription>
+                <FormDescription>Informe o local onde o encontrou</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -159,6 +160,7 @@ export function RegisterFoundItemForm() {
           />
         </section>
       </form>
+      s
     </Form>
   );
 }
