@@ -11,11 +11,11 @@ interface ListItensPageParams {
 }
 
 interface ListFoundItensPageProps {
-  searchParams: ListItensPageParams;
+  searchParams: Promise<ListItensPageParams>;
 }
 
 export default async function ListFoundItensPage({ searchParams }: ListFoundItensPageProps) {
-  const { page = 1, pageSize = 10 } = searchParams;
+  const { page = 1, pageSize = 10 } = await searchParams;
 
   const { results, totalOfRows } = await createDbTransaction(async (tx) => {
     const results = await tx.query.items.findMany({
@@ -44,7 +44,7 @@ export default async function ListFoundItensPage({ searchParams }: ListFoundIten
 
   return (
     <>
-      <section className="grid grid-cols-4 gap-4 mb-10">
+      <section className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {foundItemsList.map((item) => {
           return (
             <FoundItemCard
