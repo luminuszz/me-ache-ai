@@ -1,12 +1,16 @@
 import { signIn } from "@/auth/nextAuth";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
+import { redirect } from "next/navigation";
 
 async function handleSubmit() {
   "use server";
+
   await signIn("github", {
     redirectTo: "/",
   });
+
+  return redirect("/");
 }
 
 export default function SignInPage() {
